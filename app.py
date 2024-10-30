@@ -4,7 +4,7 @@ import streamlit as st
 import tempfile
 
 from utils import FieldManager, ModelGenerator, get_field_constraints
-from icecream import ic
+
 
 
 def init_streamlit(st):
