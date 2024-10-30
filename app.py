@@ -132,13 +132,14 @@ def main():
                         if field_name_input:                            
                             FieldManager.add_field(st, field_name_input, field_type_input, field_value_input, constraints, st.session_state[custom_validations_key].copy())
                             st.success(f"Field '{field_name_input}' added successfully!")
-
-                            # Reset input fields after confirmation
-                            st.session_state.field_type = "str"  # Reset to default field type
-                            for key in st.session_state.keys():  # Clear all constraint input fields
-                                if key in ["min_length", "max_length", "gt", "lt", "max_digits", "decimal_places", "nullable", "validation_logic", "validation_message"]:
-                                    del st.session_state[key]
-                            st.rerun()
+                            
+                        # Reset input fields after confirmation
+                        st.session_state.field_type = "str"  # Reset to default field type
+                        for key in st.session_state.keys():  # Clear all constraint input fields
+                            if key in ["min_length", "max_length", "gt", "lt", "max_digits", "decimal_places", "nullable", "validation_logic", "validation_message"]:
+                                del st.session_state[key]
+                        st.rerun()
+                    
 
     # Column for displaying and editing fields
     with col2:

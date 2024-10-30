@@ -62,7 +62,9 @@ class ModelGenerator:
         example_params = ", ".join(f"{item['name']}=\"{item['value']}\"" if item["type"] == "str" else f"{item['name']}={item['value']}" for item in example_items)
         code_lines.extend([
             "\n\n# Example Usage\n",
-            f"{model_name.lower().replace('model', '')} = {model_name}({example_params})\n"
+            'if __name__ == "__main__":\n',
+            f"    {model_name.lower().replace('model', '')} = {model_name}({example_params})\n",
+            f"    print({model_name.lower().replace('model', '')})"
         ])
 
         return "".join(code_lines)   
