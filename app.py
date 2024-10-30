@@ -243,7 +243,7 @@ def main():
 
             with st.expander("Save and Download Model"):
                 schema_name = st.text_input("Enter Schema Name", value="schema", key="schema_name")
-                if st.button("Download Model"):
+                if st.button("Generate Model"):
                     with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as tmp_file:
                         tmp_file.write(model_code)
                         tmp_file.flush()
