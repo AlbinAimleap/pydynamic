@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field, field_validator
 from typing import Optional, Dict, Any, Tuple, List
 from datetime import date, datetime, time
 import streamlit as st
+import tempfile
 
 
 def init_streamlit():
@@ -243,11 +244,11 @@ def main():
             with st.expander("Save and Download Model"):
                 schema_name = st.text_input("Enter Schema Name", value="schema", key="schema_name")
                 if st.button("Download Model"):
-                    with open(f"{schema_name}.py", "w") as f:
-                        f.write(model_code)
-                    st.success(f"Model saved as {schema_name}.py!")
-                    with open(f"{schema_name}.py", "rb") as f:
-                        st.download_button(label="Download schema.py", data=f, file_name=f"{schema_name}.py", mime="text/x-python")
-
+                    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as tmp_file:
+                        tmp_file.write(model_code)
+                        tmp_file.flush()
+                        with open(tmp_file.name, 'rb') as f:
+                            st.download_button(label=f"Download {schema_name}.py", data=f, file_name=f"{schema_name}.py", mime="text/x-python")
+                    st.success(f"Model ready for download as {schema_name}.py!")
 if __name__ == "__main__":
     main()
