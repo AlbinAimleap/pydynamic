@@ -168,7 +168,7 @@ def main():
                         if st.button(f"Remove Validation {idx + 1}", key=f"remove_validation_{idx}"):
                             st.session_state.custom_validations.pop(idx)
                             st.success(f"Validation {idx + 1} removed!")
-                            st.experimental_rerun()
+                            st.rerun()
 
                 # Button to confirm field update
                 if st.button("Update Field"):
@@ -183,7 +183,7 @@ def main():
                         for key in st.session_state.keys():  # Clear all constraint input fields
                             if key in ["min_length", "max_length", "gt", "lt", "max_digits", "decimal_places", "nullable", "validation_logic", "validation_message"]:
                                 del st.session_state[key]
-                        st.experimental_rerun()
+                        st.rerun()
 
             else:
                 # Adding new field mode
@@ -215,7 +215,7 @@ def main():
                         for key in st.session_state.keys():  # Clear all constraint input fields
                             if key in ["min_length", "max_length", "gt", "lt", "max_digits", "decimal_places", "nullable", "validation_logic", "validation_message"]:
                                 del st.session_state[key]
-                        st.experimental_rerun()
+                        st.rerun()
 
     # Column for displaying and editing fields
     with col2:
@@ -228,12 +228,12 @@ def main():
                     # Button to edit the field
                     if st.button(f"Edit Field {field['name']}", key=f"edit_field_{index}"):
                         st.session_state.edit_index = index  # Set the edit index to the current field
-                        st.experimental_rerun()
+                        st.rerun()
                     # Button to remove the field
                     if st.button(f"Remove Field {field['name']}", key=f"remove_field_{index}"):
                         FieldManager.remove_field(index)
                         st.success(f"Field '{field['name']}' removed successfully!")
-                        st.experimental_rerun()
+                        st.rerun()
 
         # Generate Model Code Button
         if st.session_state.model_name and st.session_state.field_data:
