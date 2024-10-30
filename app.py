@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, field_validator
 from typing import Optional, Dict, Any, Tuple, List
 import streamlit as st
 import tempfile
-
+import pandas as pd
 from utils import FieldManager, ModelGenerator, get_field_constraints
 
 
@@ -147,22 +147,32 @@ def main():
             with st.expander("Field List"):
                 for index, field in enumerate(st.session_state.field_data):
                     constraints = ", ".join([f"{key}={value}" for key, value in field['constraints'].items()])
-                    st.write(f"**{field['name']}**: {field['type']}")
-                    st.write(f"  - **Constraints:** {constraints}")
-                    st.write(f"  - **Custom Validations:**")
-                    for validation, message in field['custom_validations']:
-                        st.write(f"       • **Validation:** {validation}")
-                        st.write(f"       • **Message:** {message}")
-                        
-                    # Button to edit the field
-                    if st.button(f"Edit Field {field['name']}", key=f"edit_field_{index}"):
-                        st.session_state.edit_index = index  # Set the edit index to the current field
-                        st.rerun()
-                    # Button to remove the field
-                    if st.button(f"Remove Field {field['name']}", key=f"remove_field_{index}"):
-                        FieldManager.remove_field(st, index)
-                        st.success(f"Field '{field['name']}' removed successfully!")
-                        st.rerun()
+                    st.markdown(f"**{field['name']}**: {field['type']}")
+                    st.markdown(f"  - **Constraints:** {constraints}")
+                    # st.markdown(f"  - **Custom Validations:** {' | '.join([f'({validation}, {message})' for validation, message in field['custom_validations']])}")
+                    st.markdown(f"  - **Custom Validations:**")
+                    
+                    df = pd.DataFrame([{"Validation": validation, "Error Message": message} for validation, message in field['custom_validations']])
+                    st.dataframe(df, use_container_width=True, hide_index=True)
+                    
+                    # for validation, message in field['custom_validations']:
+                    #     st.markdown(f"    * **Validation:** {validation}")
+                    #     st.markdown(f"    * **Message:** {message}")
+                    
+                    col_1, col_2 = st.columns([1, 1])
+                    
+                    with col_1:
+                        # Button to edit the field
+                        if st.button(f"Edit Field {field['name']}", key=f"edit_field_{index}"):
+                            st.session_state.edit_index = index  # Set the edit index to the current field
+                            st.rerun()
+                    
+                    with col_2:
+                        # Button to remove the field
+                        if st.button(f"Remove Field {field['name']}", key=f"remove_field_{index}"):
+                            FieldManager.remove_field(st, index)
+                            st.success(f"Field '{field['name']}' removed successfully!")
+                            st.rerun()
 
         # Generate Model Code Button
         if st.session_state.model_name and st.session_state.field_data:
